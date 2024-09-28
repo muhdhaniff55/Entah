@@ -18,7 +18,7 @@ on:
       CONFIG_FILE:
         description: 'Config file (You can put multiple configs separated by space)'
         required: true
-        default: 'vayu_use_defconfig'
+        default: 'vayu_user_defconfig'
       KERNELSU:
         description: 'Enable KernelSU setup (true/false)'
         required: false
@@ -43,10 +43,7 @@ jobs:
           rm -rf ${{ github.workspace }}/*
           sudo apt-get update
           sudo apt-get install -y build-essential git curl unzip bison flex \
-            libssl-dev libelf-dev libncurses-dev ccache zip make pkg-config \
-            g++-multilib gcc-multilib \
-            gcc-aarch64-linux-gnu \
-            gcc-arm-linux-gnueabi
+            libssl-dev libelf-dev libncurses-dev ccache zip make pkg-config 
 
       - name: Cloning Kernel Source
         run: git clone --single-branch --depth=1 --no-tags ${{ github.event.inputs.KERNEL_SOURCE }} -b ${{ github.event.inputs.KERNEL_BRANCH }} ${{ github.workspace }}
