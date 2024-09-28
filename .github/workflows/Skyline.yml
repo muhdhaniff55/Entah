@@ -1,0 +1,30 @@
+# A simple action usage
+name: Skyline Kernel
+on:
+  workflow_dispatch:
+
+jobs:
+  Build-Kernel:
+    strategy:
+      fail-fast: false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+    - name: Android Kernel Build Action
+      uses: dabao1955/kernel_build_action@main
+            
+      with:
+          kernel-url: https://github.com/GXC2356/platform_kernel_xiaomi_vayu
+          kernel-branch: main
+          depth: 1
+          config: vayu_user_defconfig
+          arch: arm64
+          other-clang-url: https://github.com/XSans0/WeebX-Clang/releases/download/WeebX-Clang-20.0.0git-release/WeebX-Clang-20.0.0git.tar.gz
+          ksu: true
+          ksu-version: main
+          anykernel3: true
+          anykernel3-url: https://github.com/GXC2356/AnyKernel3
+          extra-cmd: AR=llvm-ar \ LLVM_NM=llvm-nm \ OBJCOPY=llvm-objcopy \ LD=ld.lld NM=llvm-nm \ LLVM=1 \ LLVM_IAS=1
+          
