@@ -21,7 +21,8 @@ jobs:
           depth: 1
           config: vayu_user_defconfig
           arch: arm64
-          other-clang-url: https://github.com/XSans0/WeebX-Clang/releases/download/WeebX-Clang-20.0.0git-release/WeebX-Clang-20.0.0git.tar.gz
+          other-clang-url: https://gitlab.com/muhdhaniff55/android_prebuilts_clang_host_linux-x86_clang-r536225
+          other-clang-branch: main
           ksu: true
           ksu-version: main
           anykernel3: true
