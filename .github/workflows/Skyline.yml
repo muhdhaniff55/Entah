@@ -27,5 +27,4 @@ jobs:
           ksu-version: main
           anykernel3: true
           anykernel3-url: https://github.com/GXC2356/AnyKernel3
-          extra-cmd: AR=llvm-ar \ LLVM_NM=llvm-nm \ OBJCOPY=llvm-objcopy \ LD=ld.lld NM=llvm-nm \ LLVM=1 \ LLVM_IAS=1
           
