@@ -22,6 +22,7 @@ jobs:
           config: vayu_user_defconfig
           arch: arm64
           aosp-gcc: true
+          android-version: 12
           ksu: true
           ksu-version: main
           anykernel3: true
