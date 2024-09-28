@@ -21,9 +21,8 @@ jobs:
           depth: 1
           config: vayu_user_defconfig
           arch: arm64
-          aosp-clang: true
-          aosp-gcc: true
-          aosp-clang-version: r536225
+          other-clang-url: https://gitlab.com/muhdhaniff55/android_prebuilts_clang_host_linux-x86_clang-r536225
+          other-clang-branch: main
           ksu: true
           ksu-version: main
           anykernel3: true
