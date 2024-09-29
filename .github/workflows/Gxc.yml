@@ -1,0 +1,46 @@
+name: GXC Build.sh
+on:
+  workflow_dispatch:
+
+jobs:
+  Kernel:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+       shell: bash
+       working-directory: ${{ github.workspace }}
+
+    steps:
+      - name: Cleanup
+        run: rm -rf ${{ github.workspace }}/*
+
+      - name: Update system
+        run: |
+          sudo apt-get update
+          sudo apt-get upgrade
+
+      - name: Clone kernel source
+        run: git clone https://github.com/GXC2356/platform_kernel_xiaomi_vayu.git -b KernelSU --depth=1 .
+
+      - name: Install required debs
+        run: bash tools/build/packages.sh
+
+      - name: Start Compilation
+        run: bash tools/build/build.sh
+
+      - name: Set-up files
+        run: |
+          # Set-up files info
+            zip_file=$(find $HOME -name 'Skyline*.zip' -print -quit)
+            echo "ZIP_FILE=$zip_file" >> $GITHUB_ENV
+            echo "ZIP_NAME=$(basename "$zip_file" .zip)" >> $GITHUB_ENV
+
+      - name: Upload files to repository releases page
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ${{ env.ZIP_FILE }}
+          name: ${{ env.ZIP_NAME }}
+          tag_name: ${{ github.run_id }}
+          body: |
+            KernelSU
