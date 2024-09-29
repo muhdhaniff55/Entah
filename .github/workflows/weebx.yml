@@ -127,7 +127,7 @@ jobs:
             cd "${objdir}"
             compiled_image="arch/arm64/boot/Image"
             compiled_dtbo="arch/arm64/boot/dtbo.img"
-            qcom_dtb="arch/arm64/boot/dts/vendor/qcom"
+            qcom_dtb="arch/arm64/boot/dts/qcom"
             
             if [[ -f ${compiled_image} && -f ${compiled_dtbo} ]]; then
               git clone -q ${{ github.event.inputs.ANYKERNEL }} "$anykernel"
