@@ -1,6 +1,11 @@
 name: GXC Build.sh
 on:
   workflow_dispatch:
+    inputs:
+      TOOLCHAIN_URL:
+        description: "Clone URL of your toolchain or tarball URL"
+        required: true
+        default: 'https://github.com/XSans0/WeebX-Clang/releases/download/WeebX-Clang-20.0.0git-release/WeebX-Clang-20.0.0git.tar.gz'
 
 jobs:
   Kernel:
