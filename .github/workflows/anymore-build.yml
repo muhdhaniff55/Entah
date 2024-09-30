@@ -1,0 +1,65 @@
+name: Anymore Build.sh
+on:
+  workflow_dispatch:
+    inputs:
+      TOOLCHAIN_URL:
+        description: "Clone URL of your toolchain or tarball URL"
+        required: true
+        default: 'https://github.com/ZyCromerZ/Clang/releases/download/20.0.0git-20240929-release/Clang-20.0.0git-20240929.tar.gz'
+
+jobs:
+  Kernel:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+       shell: bash
+       working-directory: ${{ github.workspace }}
+
+    steps:
+      - name: Cleanup
+        run: rm -rf ${{ github.workspace }}/*
+
+      - name: Update system
+        run: |
+          sudo apt-get update
+          sudo apt-get install device-tree-compiler libufdt-dev
+          sudo apt-get upgrade
+
+      - name: Clone kernel source
+        run: git clone https://github.com/muhdhaniff55/kernel_xiaomi_vayu_upstream.git -b ksu --depth=1 .
+        
+      - name: Install required debs
+        run: bash tools/build/packages.sh
+
+      - name: Cloning Toolchain
+        run: |
+          TOOLCHAIN_URL="${{ github.event.inputs.TOOLCHAIN_URL }}"
+
+          if [[ "$TOOLCHAIN_URL" == *.tar.gz || "$TOOLCHAIN_URL" == *.tar.bz2 || "$TOOLCHAIN_URL" == *.tar.xz ]]; then
+            curl -L "$TOOLCHAIN_URL" -o toolchain.tar.gz
+            mkdir -p ${{ github.workspace }}/toolchain
+            tar -xf toolchain.tar.gz -C ${{ github.workspace }}/toolchain
+            rm toolchain.tar.gz
+          else
+            git clone --single-branch --depth=1 --no-tags ${{ github.event.inputs.TOOLCHAIN_URL }} ${{ github.workspace }}/toolchain
+          fi
+
+      - name: Start Compilation
+        run: bash build2.sh
+
+      - name: Set-up files
+        run: |
+          # Set-up files info
+            zip_file=$(find $HOME -name 'Anymore*.zip' -print -quit)
+            echo "ZIP_FILE=$zip_file" >> $GITHUB_ENV
+            echo "ZIP_NAME=$(basename "$zip_file" .zip)" >> $GITHUB_ENV
+
+      - name: Upload files to repository releases page
+        uses: softprops/action-gh-release@v2.0.8
+        with:
+          files: |
+            ${{ env.ZIP_FILE }}
+          name: ${{ env.ZIP_NAME }}
+          tag_name: ${{ github.run_id }}
+          body: |
+            KernelSU
