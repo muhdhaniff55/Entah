@@ -22,7 +22,8 @@ jobs:
       - name: Update system
         run: |
           sudo apt-get update
-          sudo apt-get install device-tree-compiler libufdt-dev
+          sudo apt-get install -y device-tree-compiler libufdt-dev
+          sudo apt-get install -y build-essential bc lld gcc-aarch64-linux-gnu gcc-arm-linux-gnueabi libssl-dev libfl-dev curl git ftp lftp wget libarchive-tools ccache python2 python2-dev zip unzip tar gzip bzip2 rar unrar cpio jq llvm 
           sudo apt-get upgrade
 
       - name: Clone Anykernel
@@ -30,9 +31,6 @@ jobs:
       
       - name: Clone kernel source
         run: git clone https://github.com/muhdhaniff55/kernel_xiaomi_vayu_upstream.git -b ksu --depth=1 .
-        
-      - name: Install required debs
-        run: bash tools/build/packages.sh
 
       - name: Cloning Toolchain
         run: |
