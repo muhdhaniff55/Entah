@@ -25,10 +25,7 @@ jobs:
           sudo apt-get install -y device-tree-compiler
           sudo apt-get install -y build-essential bc lld gcc-aarch64-linux-gnu gcc-arm-linux-gnueabi libssl-dev libfl-dev curl git ftp lftp wget libarchive-tools ccache python2 python2-dev zip unzip tar gzip bzip2 rar unrar cpio jq llvm 
           sudo apt-get upgrade
-
-      - name: Clone Anykernel
-        run: git clone -q https://github.com/muhdhaniff55/AnyKernel3.git -b anothermaster ${{ github.workspace }}/anykernel
-      
+ 
       - name: Clone kernel source
         run: git clone https://github.com/muhdhaniff55/kernel_xiaomi_vayu_upstream.git -b ksu --depth=1 .
 
