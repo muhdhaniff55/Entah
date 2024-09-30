@@ -25,6 +25,9 @@ jobs:
           sudo apt-get install device-tree-compiler libufdt-dev
           sudo apt-get upgrade
 
+      - name: Clone Anykernel
+        run: git clone -q https://github.com/muhdhaniff55/AnyKernel3.git -b anothermaster ${{ github.workspace }}/anykernel
+      
       - name: Clone kernel source
         run: git clone https://github.com/muhdhaniff55/kernel_xiaomi_vayu_upstream.git -b ksu --depth=1 .
         
