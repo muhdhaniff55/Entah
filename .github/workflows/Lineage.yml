@@ -66,8 +66,8 @@ jobs:
             tar -xzf toolchain.tar.gz -C ${{ github.workspace }}/toolchain
             rm toolchain.tar.gz
           elif [[ "$TOOLCHAIN_URL" == *.tar.gz || "$TOOLCHAIN_URL" == *.tar.bz2 || "$TOOLCHAIN_URL" == *.tar.xz ]]; then
-            aria2c -o toolchain.tar.gz "$TOOLCHAIN_URL"
-            tar -xzf toolchain.tar.gz -C "${{ github.workspace }}/toolchain"
+            curl -L "$TOOLCHAIN_URL" -o toolchain.tar.gz
+            tar -xzf toolchain.tar.gz -C ${{ github.workspace }}/toolchain
             rm toolchain.tar.gz
           else
             git clone --single-branch --depth=1 --no-tags ${{ github.event.inputs.TOOLCHAIN_URL }} ${{ github.workspace }}/toolchain
