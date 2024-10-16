@@ -126,10 +126,9 @@ jobs:
               SUBARCH=arm64 \
               DTC_EXT=dtc \
               CC=clang \
-              CLANG_TRIPLE=aarch64-linux-gnu- \
               CROSS_COMPILE=aarch64-linux-gnu- \
-              CROSS_COMPILE_ARM32=arm-linux-gnueabi- \
-              CROSS_COMPILE_COMPAT=arm-linux-gnueabi- \
+              LLVM=1 \
+              LLVM_IAS=1 \
               LD=ld.lld \
               AR=llvm-ar \
               NM=llvm-nm \
@@ -137,8 +136,10 @@ jobs:
               OBJCOPY=llvm-objcopy \
               OBJDUMP=llvm-objdump \
               READELF=llvm-readelf \
-              LLVM=1 \
-              LLVM_IAS=1
+              HOSTCC=clang \
+              HOSTCXX=clang++ \
+              HOSTAR=llvm-ar \
+              HOSTLD=ld.lld
           }
 
           completion() {
