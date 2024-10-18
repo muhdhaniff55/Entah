@@ -6,11 +6,11 @@ on:
       KERNEL_SOURCE:
         description: 'Kernel source URL'
         required: true
-        default: 'https://github.com/AnymoreProject/kernel_xiaomi_vayu_upstream.git'
+        default: 'https://github.com/PixelOS-Devices/kernel_xiaomi_vayu.git'
       KERNEL_BRANCH:
         description: 'Kernel branch'
         required: true
-        default: 'lineage-20-ksu'
+        default: 'fourteen'
       KERNEL_NAME:
         description: 'Kernel/zip name'
         required: true
@@ -18,7 +18,7 @@ on:
       CONFIG_FILE:
         description: 'Config file (You can put multiple configs separated by space)'
         required: true
-        default: 'vayu_defconfig'
+        default: 'vayu_stock_defconfig'
       TOOLCHAIN_URL:
         description: "Clone URL of your toolchain or tarball URL"
         required: true
@@ -30,7 +30,7 @@ on:
       KERNELSU:
         description: "KernelSU setup"
         required: false
-        default: 'false'
+        default: 'true'
 
 jobs:
   Kernel:
