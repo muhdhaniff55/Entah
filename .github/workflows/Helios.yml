@@ -22,6 +22,7 @@ jobs:
           config: vayu_user_defconfig
           arch: arm64
           aosp-clang: true
+          aosp-gcc: true
           ksu: true
           ccache: true
           android-version: 15
