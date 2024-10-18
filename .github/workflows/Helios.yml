@@ -21,14 +21,12 @@ jobs:
           depth: 1
           config: vayu_user_defconfig
           arch: arm64
-          aosp-clang: true
-          aosp-gcc: true
+          other-clang-url: https://github.com/ZyCromerZ/Clang/releases/download/20.0.0git-20241018-release/Clang-20.0.0git-20241018.tar.gz
           ksu: true
           ksu-version: v0.9.5
           ccache: true
-          android-version: 15
-          aosp-clang-version: r522817
           disable-lto: true
           anykernel3: true
+          anykernel3-url: https://github.com/muhdhaniff55/AnyKernel3
           extra-cmd: LD=ld.lld AR=llvm-ar NM=llvm-nm  STRIP=llvm-strip OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf
           
