@@ -24,6 +24,7 @@ jobs:
           aosp-clang: true
           aosp-gcc: true
           ksu: true
+          ksu-version: v0.9.5
           ccache: true
           android-version: 15
           aosp-clang-version: r522817
