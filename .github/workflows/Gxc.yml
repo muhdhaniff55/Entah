@@ -61,6 +61,8 @@ jobs:
       
       - name: Start Compilation
         run: |
+          kernel_dir=${{ github.workspace }}
+          
           sed -i "s|CLANG_DIR=.*|CLANG_DIR=${kernel_dir}/toolchain|" tools/build/build.sh
           cat tools/build/build.sh
           bash tools/build/build.sh
