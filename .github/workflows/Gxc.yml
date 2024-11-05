@@ -5,7 +5,11 @@ on:
       TOOLCHAIN_URL:
         description: "Clone URL of your toolchain or tarball URL"
         required: true
-        default: 'https://github.com/ZyCromerZ/Clang/releases/download/20.0.0git-20240929-release/Clang-20.0.0git-20240929.tar.gz'
+        default: 'https://raw.githubusercontent.com/ZyCromerZ/Clang/main/Clang-main-link.txt'
+      APATCH:
+        description: "Apatch Configuration setup"
+        required: false
+        default: 'true'
 
 jobs:
   Kernel:
@@ -25,7 +29,7 @@ jobs:
           sudo apt-get upgrade
 
       - name: Clone kernel source
-        run: git clone https://github.com/muhdhaniff55/platform_kernel_xiaomi_vayu.git -b KernelSU --depth=1 .
+        run: git clone https://github.com/muhdhaniff55/platform_kernel_xiaomi_vayu.git -b main --depth=1 .
 
       - name: Install required debs
         run: bash tools/build/packages.sh
@@ -34,15 +38,25 @@ jobs:
         run: |
           TOOLCHAIN_URL="${{ github.event.inputs.TOOLCHAIN_URL }}"
 
-          if [[ "$TOOLCHAIN_URL" == *.tar.gz || "$TOOLCHAIN_URL" == *.tar.bz2 || "$TOOLCHAIN_URL" == *.tar.xz ]]; then
+          if [[ $TOOLCHAIN_URL == *.txt ]]; then
+            actual_url=$(curl -s "$TOOLCHAIN_URL")
+            curl -L "$actual_url" -o toolchain.tar.gz
+            tar -xzf toolchain.tar.gz -C ${{ github.workspace }}/tc/clang
+            rm toolchain.tar.gz
+          elif [[ "$TOOLCHAIN_URL" == *.tar.gz || "$TOOLCHAIN_URL" == *.tar.bz2 || "$TOOLCHAIN_URL" == *.tar.xz ]]; then
             curl -L "$TOOLCHAIN_URL" -o toolchain.tar.gz
-            mkdir -p ${{ github.workspace }}/toolchain
-            tar -xf toolchain.tar.gz -C ${{ github.workspace }}/toolchain
+            tar -xzf toolchain.tar.gz -C ${{ github.workspace }}/tc/clang
             rm toolchain.tar.gz
           else
-            git clone --single-branch --depth=1 --no-tags ${{ github.event.inputs.TOOLCHAIN_URL }} ${{ github.workspace }}/toolchain
+            git clone --single-branch --depth=1 --no-tags ${{ github.event.inputs.TOOLCHAIN_URL }} ${{ github.workspace }}/tc/clang
           fi
 
+      - name: Apatch Configuration
+        if: ${{ github.event.inputs.APATCH == 'true' }}
+        run: |
+          echo -e "CONFIG_KALLSYMS=y" >> arch/arm64/configs/vayu_user_defconfig
+          echo -e "CONFIG_KALLSYMS_ALL=y" >> arch/arm64/configs/vayu_user_defconfig
+      
       - name: Start Compilation
         run: bash tools/build/build.sh
 
