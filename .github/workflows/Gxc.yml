@@ -28,12 +28,12 @@ jobs:
           sudo apt-get update
           sudo apt-get upgrade
 
-      - name: Install required debs
-        run: bash tools/build/packages.sh
-        
       - name: Clone kernel source
         run: git clone https://github.com/muhdhaniff55/platform_kernel_xiaomi_vayu.git -b main --depth=1 .
 
+      - name: Install required debs
+        run: bash tools/build/packages.sh
+        
       - name: Apatch Configuration
         if: ${{ github.event.inputs.APATCH == 'true' }}
         run: |
