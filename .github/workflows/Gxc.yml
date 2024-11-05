@@ -38,8 +38,8 @@ jobs:
       - name: Apatch Configuration
         if: ${{ github.event.inputs.APATCH == 'true' }}
         run: |
-          echo -e "CONFIG_KALLSYMS=y" >> arch/arm64/configs/vayu_user_defconfig
-          echo -e "CONFIG_KALLSYMS_ALL=y" >> arch/arm64/configs/vayu_user_defconfig
+          grep -q '^CONFIG_KALLSYMS=' arch/arm64/configs/vayu_user_defconfig || echo 'CONFIG_KALLSYMS=y' >> arch/arm64/configs/vayu_user_defconfig
+          grep -q '^CONFIG_KALLSYMS_ALL=' arch/arm64/configs/vayu_user_defconfig || echo 'CONFIG_KALLSYMS_ALL=y' >> arch/arm64/configs/vayu_user_defconfig
           
       - name: Cloning Toolchain
         run: |
