@@ -8,9 +8,10 @@ on:
         required: true
         default: 'https://raw.githubusercontent.com/ZyCromerZ/Clang/main/Clang-main-link.txt'
       APATCH:
-        description: "Apatch Configuration setup"
-        required: false
-        default: 'true'
+        description: "Toggle Apatch Configuration setup"
+        required: true
+        type: boolean
+        default: true
 
 jobs:
   Kernel:
@@ -36,7 +37,7 @@ jobs:
         run: bash tools/build/packages.sh
         
       - name: Apatch Configuration
-        if: ${{ github.event.inputs.APATCH == 'true' }}
+        if: ${{ github.event.inputs.APATCH }}
         run: |
           grep -q '^CONFIG_KALLSYMS=' arch/arm64/configs/vayu_user_defconfig || echo 'CONFIG_KALLSYMS=y' >> arch/arm64/configs/vayu_user_defconfig
           grep -q '^CONFIG_KALLSYMS_ALL=' arch/arm64/configs/vayu_user_defconfig || echo 'CONFIG_KALLSYMS_ALL=y' >> arch/arm64/configs/vayu_user_defconfig
