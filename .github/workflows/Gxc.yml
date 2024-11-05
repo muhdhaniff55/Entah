@@ -1,4 +1,5 @@
 name: GXC Build.sh
+
 on:
   workflow_dispatch:
     inputs:
@@ -16,8 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-       shell: bash
-       working-directory: ${{ github.workspace }}
+        shell: bash
+        working-directory: ${{ github.workspace }}
 
     steps:
       - name: Cleanup
@@ -43,30 +44,33 @@ jobs:
       - name: Cloning Toolchain
         run: |
           TOOLCHAIN_URL="${{ github.event.inputs.TOOLCHAIN_URL }}"
-          mkdir -p ${{ github.workspace }}/tc/clang
+          mkdir -p ${{ github.workspace }}/toolchain
 
           if [[ $TOOLCHAIN_URL == *.txt ]]; then
             actual_url=$(curl -s "$TOOLCHAIN_URL")
             curl -L "$actual_url" -o toolchain.tar.gz
-            tar -xzf toolchain.tar.gz -C ${{ github.workspace }}/tc/clang
+            tar -xzf toolchain.tar.gz -C ${{ github.workspace }}/toolchain
             rm toolchain.tar.gz
           elif [[ "$TOOLCHAIN_URL" == *.tar.gz || "$TOOLCHAIN_URL" == *.tar.bz2 || "$TOOLCHAIN_URL" == *.tar.xz ]]; then
             curl -L "$TOOLCHAIN_URL" -o toolchain.tar.gz
-            tar -xzf toolchain.tar.gz -C ${{ github.workspace }}/tc/clang
+            tar -xzf toolchain.tar.gz -C ${{ github.workspace }}/toolchain
             rm toolchain.tar.gz
           else
-            git clone --single-branch --depth=1 --no-tags ${{ github.event.inputs.TOOLCHAIN_URL }} ${{ github.workspace }}/tc/clang
+            git clone --single-branch --depth=1 --no-tags ${{ github.event.inputs.TOOLCHAIN_URL }} ${{ github.workspace }}/toolchain
           fi
       
       - name: Start Compilation
-        run: cat tools/build/build.sh && bash tools/build/build.sh
+        run: |
+          sed -i "s|CLANG_DIR=.*|CLANG_DIR=${kernel_dir}/toolchain|" tools/build/build.sh
+          cat tools/build/build.sh
+          bash tools/build/build.sh
 
       - name: Set-up files
         run: |
           # Set-up files info
-            zip_file=$(find $HOME -name 'Skyline*.zip' -print -quit)
-            echo "ZIP_FILE=$zip_file" >> $GITHUB_ENV
-            echo "ZIP_NAME=$(basename "$zip_file" .zip)" >> $GITHUB_ENV
+          zip_file=$(find $HOME -name 'Skyline*.zip' -print -quit)
+          echo "ZIP_FILE=$zip_file" >> $GITHUB_ENV
+          echo "ZIP_NAME=$(basename "$zip_file" .zip)" >> $GITHUB_ENV
 
       - name: Upload files to repository releases page
         uses: softprops/action-gh-release@v2
