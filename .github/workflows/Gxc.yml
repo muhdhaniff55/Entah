@@ -59,7 +59,7 @@ jobs:
           fi
       
       - name: Start Compilation
-        run: bash tools/build/build.sh
+        run: cat tools/build/build.sh && bash tools/build/build.sh
 
       - name: Set-up files
         run: |
