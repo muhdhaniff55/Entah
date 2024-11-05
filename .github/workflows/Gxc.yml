@@ -28,15 +28,22 @@ jobs:
           sudo apt-get update
           sudo apt-get upgrade
 
+      - name: Install required debs
+        run: bash tools/build/packages.sh
+        
       - name: Clone kernel source
         run: git clone https://github.com/muhdhaniff55/platform_kernel_xiaomi_vayu.git -b main --depth=1 .
 
-      - name: Install required debs
-        run: bash tools/build/packages.sh
-
+      - name: Apatch Configuration
+        if: ${{ github.event.inputs.APATCH == 'true' }}
+        run: |
+          echo -e "CONFIG_KALLSYMS=y" >> arch/arm64/configs/vayu_user_defconfig
+          echo -e "CONFIG_KALLSYMS_ALL=y" >> arch/arm64/configs/vayu_user_defconfig
+          
       - name: Cloning Toolchain
         run: |
           TOOLCHAIN_URL="${{ github.event.inputs.TOOLCHAIN_URL }}"
+          mkdir -p ${{ github.workspace }}/tc/clang
 
           if [[ $TOOLCHAIN_URL == *.txt ]]; then
             actual_url=$(curl -s "$TOOLCHAIN_URL")
@@ -50,12 +57,6 @@ jobs:
           else
             git clone --single-branch --depth=1 --no-tags ${{ github.event.inputs.TOOLCHAIN_URL }} ${{ github.workspace }}/tc/clang
           fi
-
-      - name: Apatch Configuration
-        if: ${{ github.event.inputs.APATCH == 'true' }}
-        run: |
-          echo -e "CONFIG_KALLSYMS=y" >> arch/arm64/configs/vayu_user_defconfig
-          echo -e "CONFIG_KALLSYMS_ALL=y" >> arch/arm64/configs/vayu_user_defconfig
       
       - name: Start Compilation
         run: bash tools/build/build.sh
