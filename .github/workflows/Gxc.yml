@@ -34,7 +34,7 @@ jobs:
           sudo apt-get upgrade
 
       - name: Clone kernel source
-        run: git clone https://github.com/GXC2356/platform_kernel_xiaomi_vayu.git -b main --depth=1 .
+        run: git clone https://github.com/muhdhaniff55/platform_kernel_xiaomi_vayu.git -b main --depth=1 .
 
       - name: Install required debs
         run: bash tools/build/packages.sh
